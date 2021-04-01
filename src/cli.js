@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const {assembleFile} = require('./assembler.js');
+const {assembleTs, assembleIdl} = require('./assembler.js');
 const fs = require('fs');
 const path = require('path');
 const yargs = require('yargs');
@@ -12,6 +12,7 @@ function printHelp() {
     console.log('    --in, -i\t\t Path to a bikeshed file to parse.');
     console.log('    --out, -o\t\t Path to a TypeScript definitions file to write.');
     console.log('    --forceGlobal, -f\t When present, all declarations will be added to the global context');
+    console.log('    --idl, -I\t\t When present, prints webidl');
     console.log('    --nominal, -n\t When present, types declarations will be made nominal when possible');
     console.log('    --version, -v\t Print version and exit');
 }
@@ -30,7 +31,8 @@ async function main(options) {
 
     const forceGlobal = Boolean(options.forceGlobal);
     const safeNominalTypes = Boolean(options.nominal);
-    const ts = await assembleFile(options.in, forceGlobal, safeNominalTypes);
+    const assemble = options.idl ? assembleIdl : assembleTs;
+    const assembled = await assemble(options.in, forceGlobal, safeNominalTypes);
 
     // try to create the path to the file
     try {
@@ -40,7 +42,7 @@ async function main(options) {
     }
 
     // let it crash!
-    await fs.promises.writeFile(options.out, ts);
+    await fs.promises.writeFile(options.out, assembled);
 }
 
 const argv = yargs(process.argv)
@@ -50,6 +52,7 @@ const argv = yargs(process.argv)
     .alias('i', 'in')
     .alias('o', 'out')
     .alias('f', 'forceGlobal')
+    .alias('I', 'idl')
     .alias('n', 'nominal')
     .argv
 main(argv);

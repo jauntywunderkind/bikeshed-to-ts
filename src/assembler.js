@@ -129,10 +129,15 @@ function assembleBlocks(blocks, forceGlobal, safeNominalTypes = false) {
     return assembleNodes(localNodes, globalNodes);
 }
 
-async function assembleFile(filePath, forceGlobal, safeNominalTypes) {
+async function assembleIdl(filePath, forceGlobal, safeNominalTypes) {
     const blocks = await parseBikeShedFile(filePath);
     const nodes = assembleBlocks(blocks, forceGlobal, safeNominalTypes);
-    return printTS(nodes);
+    return nodes;
+}
+
+async function assembleTs(filePath, forceGlobal, safeNominalTypes) {
+    const idl = await assembleIdl(filePath, forceGlobal, safeNominalTypes);
+    return printTS(idl);
 }
 
 module.exports = {
@@ -140,5 +145,6 @@ module.exports = {
     addExportKeyword,
     assembleNodes,
     assembleBlocks,
-    assembleFile,
+    assembleIdl,
+    assembleTs,
 };
