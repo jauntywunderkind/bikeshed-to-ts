@@ -1,7 +1,7 @@
 const kIDLStartExp = /<script\s+.*type=['"]?idl/;
-const kIDLPreStartExp = /<pre\s+.*class=['"]?idl/;
+const kIDLPreStartExp = /<(pre|xmp)\s+.*class=['"]?idl/;
 const kIDLStopExp = /<\/\s*script\s*>/;
-const kIDLPreStopExp = /<\/\s*pre\s*>/;
+const kIDLPreStopExp = /<\/\s*(pre|xmp)\s*>/;
 const kDFNStartExp = /<dl\s+dfn-type\s*=\s*["']?([^\s"']+)["']?\s+dfn-for\s*=\s*["']?([^\s"']+)["']?\s*>/;
 const kDFNStopExp = /<\/\s*dl>/;
 
