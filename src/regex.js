@@ -1,5 +1,7 @@
 const kIDLStartExp = /<script\s+.*type=['"]?idl/;
-const kIDLStopExp = /<\/\s*script>/;
+const kIDLPreStartExp = /<pre\s+.*class=['"]?idl/;
+const kIDLStopExp = /<\/\s*script\s*>/;
+const kIDLPreStopExp = /<\/\s*pre\s*>/;
 const kDFNStartExp = /<dl\s+dfn-type\s*=\s*["']?([^\s"']+)["']?\s+dfn-for\s*=\s*["']?([^\s"']+)["']?\s*>/;
 const kDFNStopExp = /<\/\s*dl>/;
 
@@ -28,11 +30,11 @@ function matchEndDFN(str) {
 }
 
 function matchStartIDL(str) {
-    return str.match(kIDLStartExp);
+    return str.match(kIDLStartExp) || str.match(kIDLPreStartExp);
 }
 
 function matchEndIDL(str) {
-    return str.match(kIDLStopExp);
+    return str.match(kIDLStopExp) || str.match(kIDLPreStopExp);
 }
 
 function matchMethodExp(str) {
